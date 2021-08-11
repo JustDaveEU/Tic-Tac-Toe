@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using Tic_Tac_Toe;
 
 Console.BackgroundColor = ConsoleColor.Gray;
@@ -14,15 +15,25 @@ PlayerMoveMaker currentInstance = new PlayerMoveMaker(currentGame);
 WinChecker currentState = new WinChecker(currentGame);
 Console.Clear();
 
-while (currentState.HasSomebodyWon == false)
+while (currentState.IsThereAWinner == false)
 {
     FullTurn("Player 1");
-    if (currentState.HasSomebodyWon)
+    currentState.WinCheck();
+    if (currentState.IsThereAWinner)
+        break;
+    currentState.LossCheck();
+    if (currentState.IsThereAWinner)
         break;
     FullTurn("Player 2");
+    currentState.WinCheck();
+    if (currentState.IsThereAWinner)
+        break;
+    currentState.LossCheck();
+    if (currentState.IsThereAWinner)
+        break;
 }
 currentGame.PrintGrid();
-Console.Write($"{currentState.whoWon} has won the game!");
+Console.Write($"{currentState.WhoWon} has won the game!");
 
 //Methods Here
 void EmptyLine()
@@ -52,9 +63,16 @@ void FullTurn(string player)
     EmptyLine();
     Console.Write($"{player}, your move! ");
     char playerMove = AskForNumberCharInput("Pick a position for your Move!");
-    currentInstance.MakeMove(player, playerMove);
-    currentState = new WinChecker(currentGame);
-    currentState.FullCheck();
+    if (currentInstance.MakeMove(player, playerMove))
+    {
+        currentState = new WinChecker(currentGame);
+    }
+    else
+    {
+        Console.WriteLine("This move has already been made.Try again!");
+        FullTurn((player));
+    }
+    
 }
 
 

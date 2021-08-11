@@ -24,7 +24,7 @@ namespace Tic_Tac_Toe
         public char[] RowOne => FullGrid[0];
         public char[] RowTwo => FullGrid[1];
         public char[] RowThree => FullGrid[2];
-
+        
 
         public void PrintGrid()
         {

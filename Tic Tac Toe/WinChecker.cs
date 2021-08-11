@@ -1,80 +1,118 @@
 ﻿using System;
+
 namespace Tic_Tac_Toe
 {
     public class WinChecker
     {
-        private static char[] _diagonalOne;
-            private static char[] _diagonalTwo;
-            private static char[] _horizontalOne;
-            private static char[] _horizontalTwo;
-            private static char[] _horizontalThree;
-            private static char[] _verticalOne;
-            private static char[] _verticalTwo;
-            private static char[] _verticalThree;
-            private readonly char[][] _toBeChecked = new[]
-                {_horizontalOne, _horizontalTwo, _horizontalThree, _diagonalOne, _diagonalTwo, _verticalThree, _verticalTwo, _verticalOne};
+        // Fields
+        private bool _isThereAWinner;
+        private string _whoWon;
+        private readonly Grid _grid;
 
-            //Constructor
+        // Constructor
+        public WinChecker(Grid grid)
+        {
+            _grid = grid;
+        }
 
-            public WinChecker(Grid grid)
-            {
-                _horizontalOne = grid.RowOne;
-                _horizontalTwo = grid.RowTwo;
-                _horizontalThree = grid.RowThree;
-                _diagonalOne = new char[] {grid.FullGrid[0][0], grid.FullGrid[1][1], grid.FullGrid[2][2]};
-                _diagonalTwo = new char[] {grid.FullGrid[0][2], grid.FullGrid[1][1], grid.FullGrid[2][0]};
-                _verticalOne = new char[] {grid.FullGrid[0][0], grid.FullGrid[1][0], grid.FullGrid[2][0]};
-                _verticalTwo = new char[] {grid.FullGrid[0][1], grid.FullGrid[1][1], grid.FullGrid[2][1]};
-                _verticalThree = new char[] {grid.FullGrid[0][2], grid.FullGrid[1][2], grid.FullGrid[2][2]};
-                HasSomebodyWon = false;    
-            }
-
-            private bool IsArrayFull(char[] array)
-            {
-                if (Array.TrueForAll(array, char.IsLetter))
-                    return true;
-                return false;
-            }
-
-            private bool IsArrayWon(char[] array)
-            {
-                if (IsArrayFull(array))
-                    if (array[0] == array[1] && array[1] == array[2])
-                        return true;
-                return false;
-            }
-
-            private string WhoWon(char[] array)
-            {
-                if (IsArrayWon(array))
-                    switch (array[0])
+        //Methods
+        public void WinCheck()
+        {
+            int y = 0;
+            int x;
+            for (x = 0; x < 3; ++x)
+                if (_grid.FullGrid[x][y] == _grid.FullGrid[x][y + 1] &&
+                    _grid.FullGrid[x][y + 1] == _grid.FullGrid[x][y + 2]) //Horizontal
+                {
+                    _isThereAWinner = true;
+                    switch (_grid.FullGrid[x][y])
                     {
                         case 'X':
-                            return "Player 1";
+                            _whoWon = "Player 1";
+                            break;
                         case 'O':
-                            return "Player 2";
+                            _whoWon = "Player 2";
+                            break;
                     }
+                    break;
+                }
 
-                return null;
-            }
-
-            public void FullCheck()
-            {
-                string winner = null;
-                for (int check = 0; check < 4 && winner == null; ++check)
+            x = 0;
+            for (y = 0; y < 3; ++y)
+                if (_grid.FullGrid[x][y] == _grid.FullGrid[x + 1][y] &&
+                    _grid.FullGrid[x + 1][y] == _grid.FullGrid[x + 2][y]) //Vertical
                 {
-                    if (IsArrayWon(_toBeChecked[check]))
+                    _isThereAWinner = true;
+                    switch (_grid.FullGrid[x][y])
                     {
-                        HasSomebodyWon = true;
-                        winner = WhoWon(_toBeChecked[check]);
-                        whoWon = winner;
+                        case 'X':
+                            _whoWon = "Player 1";
+                            break;
+                        case 'O':
+                            _whoWon = "Player 2";
+                            break;
                     }
+                    break;
+                }
+
+            if (_grid.FullGrid[0][0] == _grid.FullGrid[1][1] &&
+                _grid.FullGrid[1][1] == _grid.FullGrid[2][2]) //Diagonal 1
+            {
+                _isThereAWinner = true;
+                switch (_grid.FullGrid[0][0])
+                {
+                    case 'X':
+                        _whoWon = "Player 1";
+                        break;
+                    case 'O':
+                        _whoWon = "Player 2";
+                        break;
                 }
             }
-            
-            //Properties
-            public bool HasSomebodyWon { get; private set; }
 
-            public string whoWon { get; private set; }
+            if (_grid.FullGrid[0][2] == _grid.FullGrid[1][1] &&
+                _grid.FullGrid[1][1] == _grid.FullGrid[2][0]) //Diagonal 2
+            {
+                _isThereAWinner = true;
+                switch (_grid.FullGrid[0][2])
+                {
+                    case 'X':
+                        _whoWon = "Player 1";
+                        break;
+                    case 'O':
+                        _whoWon = "Player 2";
+                        break;
+                }
+            }
+        }
+
+        public void LossCheck()
+        {
+            int fullFields = 0;
+            
+            for (int field = 0; field < 3; ++field)
+            {
+                if (char.IsLetter(_grid.RowOne[field]))
+                    ++fullFields;
+                if (char.IsLetter(_grid.RowTwo[field]))
+                    ++fullFields;
+                if (char.IsLetter((_grid.RowThree[field])))
+                    ++fullFields;
+            }
+            
+            if (fullFields > 8)
+            {
+                _isThereAWinner = true;
+                _whoWon = "Nobody";
+            }
+            
+
+        }
+
+        // Properties
+
+        public string WhoWon => _whoWon;
+        public bool IsThereAWinner => _isThereAWinner;
+
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace Tic_Tac_Toe
+﻿using System;
+using System.ComponentModel.Design;
+
+namespace Tic_Tac_Toe
 {
     public class PlayerMoveMaker
     {
@@ -52,7 +55,7 @@
         }
         
         //Step 3
-        public void MakeMove(string player, char position)
+        public bool MakeMove(string player, char position)
         {
             if (IsLegalMove(position, RowSelection(position)))
             {
@@ -64,7 +67,7 @@
                             if (RowSelection(position)[index] == position)
                             {
                                 RowSelection(position)[index] = 'X';
-                                break;
+                                return true;
                             }
                         }
                         break;
@@ -74,12 +77,13 @@
                             if (RowSelection(position)[index] == position)
                             {
                                 RowSelection(position)[index] = 'O';
-                                break;
+                                return true;
                             }
                         }
                         break;
                 }
             }
+            return false;
         }
     }
 }
