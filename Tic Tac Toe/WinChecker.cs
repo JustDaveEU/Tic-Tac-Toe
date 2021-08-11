@@ -3,15 +3,16 @@ namespace Tic_Tac_Toe
 {
     public class WinChecker
     {
-            private bool _hasSomebodyWon;
-            private string _whoWon;
-            private static char[] _diagonalOne;
+        private static char[] _diagonalOne;
             private static char[] _diagonalTwo;
             private static char[] _horizontalOne;
             private static char[] _horizontalTwo;
             private static char[] _horizontalThree;
+            private static char[] _verticalOne;
+            private static char[] _verticalTwo;
+            private static char[] _verticalThree;
             private readonly char[][] _toBeChecked = new[]
-                {_horizontalOne, _horizontalTwo, _horizontalThree, _diagonalOne, _diagonalTwo};
+                {_horizontalOne, _horizontalTwo, _horizontalThree, _diagonalOne, _diagonalTwo, _verticalThree, _verticalTwo, _verticalOne};
 
             //Constructor
 
@@ -22,7 +23,10 @@ namespace Tic_Tac_Toe
                 _horizontalThree = grid.RowThree;
                 _diagonalOne = new char[] {grid.FullGrid[0][0], grid.FullGrid[1][1], grid.FullGrid[2][2]};
                 _diagonalTwo = new char[] {grid.FullGrid[0][2], grid.FullGrid[1][1], grid.FullGrid[2][0]};
-                _hasSomebodyWon = false;    
+                _verticalOne = new char[] {grid.FullGrid[0][0], grid.FullGrid[1][0], grid.FullGrid[2][0]};
+                _verticalTwo = new char[] {grid.FullGrid[0][1], grid.FullGrid[1][1], grid.FullGrid[2][1]};
+                _verticalThree = new char[] {grid.FullGrid[0][2], grid.FullGrid[1][2], grid.FullGrid[2][2]};
+                HasSomebodyWon = false;    
             }
 
             private bool IsArrayFull(char[] array)
@@ -61,15 +65,16 @@ namespace Tic_Tac_Toe
                 {
                     if (IsArrayWon(_toBeChecked[check]))
                     {
-                        _hasSomebodyWon = true;
+                        HasSomebodyWon = true;
                         winner = WhoWon(_toBeChecked[check]);
-                        _whoWon = winner;
+                        whoWon = winner;
                     }
                 }
             }
             
             //Properties
-            public bool hasSomebodyWon => _hasSomebodyWon;
-            public string whoWon => _whoWon;
+            public bool HasSomebodyWon { get; private set; }
+
+            public string whoWon { get; private set; }
     }
 }

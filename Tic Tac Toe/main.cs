@@ -14,10 +14,10 @@ PlayerMoveMaker currentInstance = new PlayerMoveMaker(currentGame);
 WinChecker currentState = new WinChecker(currentGame);
 Console.Clear();
 
-while (currentState.hasSomebodyWon == false)
+while (currentState.HasSomebodyWon == false)
 {
     FullTurn("Player 1");
-    if (currentState.hasSomebodyWon)
+    if (currentState.HasSomebodyWon)
         break;
     FullTurn("Player 2");
 }
